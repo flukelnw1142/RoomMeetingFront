@@ -1,0 +1,85 @@
+<header class="header-area border-radius transition">
+    <div class="d-md-flex align-items-center justify-content-between">
+        <div class="header-left-side d-flex align-items-center">
+            <div class="burger-menu cursor-pointer transition d-xl-none">
+                <span class="top-bar d-block bg-black transition"></span>
+                <span class="middle-bar d-block bg-black transition"></span>
+                <span class="bottom-bar d-block bg-black transition"></span>
+            </div>
+            <h1 class="title">Reserve Meeting Room</h1>
+        </div>
+
+        <!-- <div class="header-left-side d-flex align-items-center">
+            <div class="burger-menu cursor-pointer transition d-xl-none">
+                <span class="top-bar d-block bg-black transition"></span>
+                <span class="middle-bar d-block bg-black transition"></span>
+                <span class="bottom-bar d-block bg-black transition"></span>
+            </div>
+            <a (click)="openSearchRoom()" class="search-link d-flex align-items-center">
+                Search Room Booking
+                <i class="material-symbols-outlined ml-2">search</i>
+            </a>
+        </div> -->
+
+        <ul class="header-right-side d-flex align-items-center mt-0 mb-0 pl-0 list-unstyled">
+
+            <li>
+                <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
+                    <div class="profile-image">
+
+                        {{SymbolName}}
+                    </div>
+                    <span class="status d-inline-block rounded-circle position-absolute"></span>
+                </button>
+                <mat-menu class="profile-menu-dropdown" #profileMenu="matMenu" xPosition="before">
+                    <div>
+                        <div class="menu-header d-flex align-items-center">
+
+                            <div class="title">
+                                <p class="d-inline-block fw-medium">
+                                    {{UserNameEn}}
+
+                                    <span class="designation d-block text-body">
+                                        {{ IsAdmin ? "Admin" : "User" }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <ul class="menu-body pl-0 mb-0 mt-0 list-unstyled">
+
+                            <li *ngIf="IsAdmin" class="position-relative transition fw-medium">
+                                <i class="material-symbols-outlined">
+                                    settings
+                                </i>
+                                Room Settings
+                                <a (click)="openRoomSetting()" class="link-btn d-block position-absolute"></a>
+                            </li>
+
+                            <li *ngIf="IsAdmin" class="position-relative transition fw-medium">
+                                <i class="material-symbols-outlined">
+                                    loupe
+                                </i>
+                                Add New Room
+                                <a (click)="openAddRoom()" class="link-btn d-block position-absolute"></a>
+                            </li>
+                            <li class="position-relative transition fw-medium">
+                                <i class="material-symbols-outlined">
+                                    info
+                                </i>
+                                Support
+                                <a routerLink="/settings/connections" class="link-btn d-block position-absolute"></a>
+                            </li>
+                            <li class="position-relative transition fw-medium">
+                                <i class="material-symbols-outlined">
+                                    logout
+                                </i>
+                                Logout
+                                <a (click)="logout()" class="link-btn d-block position-absolute"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </mat-menu>
+            </li>
+        </ul>
+    </div>
+</header>

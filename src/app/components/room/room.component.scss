@@ -1,0 +1,757 @@
+.booking-btn-box {
+    display: flex; /* ใช้ Flexbox */
+    justify-content: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+    align-items: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+    gap: 16px; /* ระยะห่างระหว่างปุ่ม */
+    margin-top: 20px; /* เพิ่มระยะห่างจากเนื้อหาด้านบน */
+    min-width: 100px; 
+   
+  }
+  .popup-room-detail-dialog {
+    display: flex;
+    transition: .3s;
+    max-width: 800px;
+    align-items: center;
+    transform: translate(0, -20px);
+    min-height: calc(100% - 1.75rem * 2);
+    margin: {
+        left: auto;
+        right: auto;
+    };
+    .content {
+      margin-left: -125px;
+
+      .price {
+          font-size: 26px;
+          margin-top: 10px;
+      }
+  }
+  .info {      
+      padding-bottom: 20px;
+      margin: {
+          bottom: 20px;
+          top: 20px;
+      };
+      span {
+          &:not(:first-child) {
+              font-size: 15px;
+              margin-top: 5px;
+          }
+      }
+  }
+  .view-details-btn {
+      .mat-mdc-button {
+          padding: 0;
+          height: auto;
+          min-width: auto;
+          font: {
+              size: var(--fontSize) !important;
+              weight: normal;
+          };
+          &:not(:disabled) {
+              color: var(--daxaColor);
+          }
+      }
+  }
+  .subtitle-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .subtitle-left, .subtitle-right {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .subtitle-left {
+    text-align: left;
+  }
+  
+  .subtitle-right {
+    text-align: right;
+    color: gray; /* ตัวอย่างการเพิ่มสีให้ Subtitle ขวา */
+  }
+    .daxa-card {
+        width: 100%;
+
+        .mat-mdc-card-header {
+            border-bottom: 1px solid #eeeeee;
+            margin: {
+                left: -20px;
+                right: -20px;
+            };
+            padding: {
+                left: 20px;
+                right: 20px;
+                bottom: 18px;
+            };
+            .mat-mdc-card-subtitle {
+                .mat-mdc-button {
+                    padding: 0;
+                    height: auto;
+                    line-height: 1;
+                    min-width: auto;
+                    display: inline-block;
+                    font-size: 23px !important;
+                }
+            }
+        }
+        .mat-mdc-card-content {
+            .main-label {
+                margin-bottom: 12px;
+                font-size: 15px;
+            }
+            .mat-mdc-form-field {
+                margin-bottom: 20px;
+            }
+            .btn-box {
+                text-align: right;
+
+                .mat-mdc-button {
+                    border: 0;
+                    height: auto;
+                    min-width: auto;
+                    min-height: auto;
+                    padding: 14px 35px;
+                    font-weight: normal;
+                    color: var(--whiteColor);
+                    font-size: 15px !important;
+                    background-color: var(--daxaColor);
+
+                    &:first-child {
+                        margin-right: 10px;
+                        background-color: var(--dangerColor);
+                    }
+                }
+            }
+        }
+    }
+}
+.mat-mdc-card {
+    &.daxa-card {
+        &.recent-orders-card {
+            .mat-mdc-card-content {
+                margin: {
+                    left: -20px;
+                    right: -20px;
+                };
+                .all-projects-table {
+                    .mat-mdc-table {
+                        .mat-mdc-header-cell {
+                            padding: {
+                                top: 15px;
+                                bottom: 15px;
+                            };
+                            &:last-child {
+                                text-align: right;
+                            }
+                        }
+                        .mat-mdc-cell {
+                            padding: {
+                                top: 18.5px;
+                                bottom: 18.5px;
+                            };
+                            &:last-child {
+                                text-align: right;
+                            }
+                        }
+                        .daxa-badge {
+                            color: var(--daxaColor);
+                            background: rgba(15, 121, 243, 0.10);
+
+                            &.in-progress {
+                                color: var(--warningColor);
+                                background: rgba(241, 179, 28, 0.10);
+                            }
+                            &.pending {
+                                color: var(--successColor);
+                                background: rgba(46, 212, 126, 0.10);
+                            }
+                            &.not-started {
+                                color: var(--dangerColor);
+                                background: rgba(231, 76, 60, 0.10);
+                            }
+                        }
+                    }
+                }
+                .recent-orders-table {
+                    .mat-mdc-table {
+                        .mat-mdc-header-cell {
+                            padding: {
+                                top: 5px;
+                                bottom: 5px;
+                            };
+                            &:last-child {
+                                text-align: right;
+                            }
+                        }
+                        .mat-mdc-cell {
+                            padding: {
+                                top: 3px;
+                                bottom: 3px;
+                            };
+                            &:last-child {
+                                text-align: right;
+                            }
+                        }
+                        .info {
+                            .image {
+                                width: 50px;
+                                line-height: .01;
+                                margin-right: 12px;
+                                img {
+                                    border-radius: 50%;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            &.rtl-enabled {
+                .mat-mdc-card-content {
+                    .recent-orders-table {
+                        .mat-mdc-table {
+                            .mat-mdc-header-cell {
+                                &:last-child {
+                                    text-align: left;
+                                }
+                            }
+                            .mat-mdc-cell {
+                                &:last-child {
+                                    text-align: left;
+                                }
+                            }
+                            .info {
+                                .image {
+                                    margin: {
+                                        right: 0;
+                                        left: 12px;
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+::ng-deep {
+    .mat-mdc-card {
+        &.daxa-card {
+            &.recent-orders-card {
+                .mat-mdc-card-header {
+                    .mat-mdc-card-header-text {
+                        .mat-mdc-card-subtitle {
+                            .search-box {
+                                margin-left: 25px;
+                            }
+                        }
+                    }
+                }
+                .mat-mdc-card-content {
+                    .recent-orders-table {
+                        .mat-mdc-paginator {
+                            padding: {
+                                top: 15px;
+                                left: 20px;
+                                right: 20px;
+                            };
+                        }
+                    }
+                }
+                &.rtl-enabled {
+                    .mat-mdc-card-header {
+                        .mat-mdc-card-header-text {
+                            .mat-mdc-card-subtitle {
+                                .search-box {
+                                    margin: {
+                                        left: 0;
+                                        right: 25px;
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .mat-mdc-card {
+        &.daxa-card {
+            &.recent-orders-card {
+                .mat-mdc-card-content {
+                    margin: {
+                        left: -15px;
+                        right: -15px;
+                    };
+                    .recent-orders-table {
+                        .mat-mdc-table {
+                            .mat-mdc-header-cell {
+                                padding: {
+                                    top: 10px;
+                                    bottom: 10px;
+                                };
+                            }
+                            .mat-mdc-cell {
+                                padding: {
+                                    top: 10px;
+                                    bottom: 10px;
+                                };
+                            }
+                            .info {
+                                .image {
+                                    width: 40px;
+                                    margin-right: 8px;
+                                }
+                            }
+                        }
+                    }
+                }
+                &.rtl-enabled {
+                    .mat-mdc-card-content {
+                        .recent-orders-table {
+                            .mat-mdc-table {
+                                .info {
+                                    .image {
+                                        margin: {
+                                            right: 0;
+                                            left: 8px;
+                                        };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .mat-mdc-card {
+            &.daxa-card {
+                &.recent-orders-card {
+                    .mat-mdc-card-header {
+                        .mat-mdc-card-header-text {
+                            display: block;
+
+                            .mat-mdc-card-subtitle {
+                                margin-top: 12px;
+                            }
+                            .mat-mdc-card-subtitle {
+                                .search-box {
+                                    width: 68%;
+                                    margin-left: 15px;
+                                }
+                            }
+                        }
+                    }
+                    .mat-mdc-card-content {
+                        .recent-orders-table {
+                            .mat-mdc-paginator {
+                                padding: {
+                                    top: 10px;
+                                    left: 15px;
+                                    right: 15px;
+                                };
+                            }
+                        }
+                    }
+                    &.rtl-enabled {
+                        .mat-mdc-card-header {
+                            .mat-mdc-card-header-text {
+                                .mat-mdc-card-subtitle {
+                                    .search-box {
+                                        margin: {
+                                            left: 0;
+                                            right: 15px;
+                                        };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+    .mat-mdc-card {
+        &.daxa-card {
+            &.recent-orders-card {
+                .mat-mdc-card-content {
+                    margin: {
+                        left: -20px;
+                        right: -20px;
+                    };
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .mat-mdc-card {
+            &.daxa-card {
+                &.recent-orders-card {
+                    .mat-mdc-card-content {
+                        .recent-orders-table {
+                            .mat-mdc-paginator {
+                                padding: {
+                                    left: 20px;
+                                    right: 20px;
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    ::ng-deep {
+        .mat-mdc-card {
+            &.daxa-card {
+                &.recent-orders-card {
+                    .mat-mdc-card-header {
+                        .mat-mdc-card-header-text {
+                            .mat-mdc-card-subtitle {
+                                .search-box {
+                                    width: 280px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}
+.mat-mdc-card {
+  &.daxa-card {
+      &.team-card {
+          .mat-mdc-card-header {
+              margin-bottom: 0;
+          }
+          .mat-mdc-card-content {
+              .image {
+                  margin-right: 15px;
+
+                  img {
+                      width: 100px;
+                      border-radius: 50%;
+                  }
+              }
+              h5 {
+                  margin-bottom: 5px;
+              }
+              .title {
+                  font-size: 18px;
+                  margin: {
+                      top: 13px;
+                      bottom: 10px;
+                  };
+              }
+              .users-list {
+                  margin: {
+                      top: 12px;
+                      bottom: 13px;
+                  };
+                  img {
+                      width: 42px;
+                      border-radius: 50%;
+                      margin-right: -13px;
+                      border: 2px solid var(--whiteColor);
+                      
+                      &:last-child {
+                          margin-right: 0;
+                      }
+                  }
+              }
+              .mat-mdc-progress-bar {
+                  --mdc-linear-progress-active-indicator-color: var(--infoColor);
+                  --mdc-linear-progress-active-indicator-height: 5px;
+                  --mdc-linear-progress-track-height: 5px;
+                  margin-left: 10px;
+              }
+              .mat-mdc-button {
+                  border: 0;
+                  height: auto;
+                  min-width: auto;
+                  min-height: auto;
+                  margin-top: 17px;
+                  padding: 12px 35px;
+                  font-weight: normal;
+                  color: var(--whiteColor);
+                  font-size: 15px !important;
+                  background-color: var(--daxaColor);
+              }
+          }
+      }
+  }
+}
+::ng-deep {
+  .mat-mdc-card {
+      &.daxa-card {
+          &.team-card {
+              .mat-mdc-card-header {
+                  .mat-mdc-card-header-text {
+                      .mat-mdc-card-subtitle {
+                          .mat-mdc-button {
+                              &.card-header-menu-btn {
+                                  top: 20px;
+                                  right: 20px;
+                                  position: absolute;
+      
+                                  &::after {
+                                      display: none;
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
+// Dark Mode CSS
+.component-dark-theme {
+  .mat-mdc-card {
+      &.daxa-card {
+          &.team-card {
+              .mat-mdc-card-content {
+                  .users-list {
+                      img {
+                          border-color: #1b232d;
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
+// RTL Enabled
+.rtl-enabled {
+  .mat-mdc-card {
+      &.daxa-card {
+          &.team-card {
+              .mat-mdc-card-content {
+                  .image {
+                      margin: {
+                          left: 15px;
+                          right: 0;
+                      };
+                  }
+                  .users-list {
+                      img {
+                          margin: {
+                              right: 0;
+                              left: -13px;
+                          };
+                          &:last-child {
+                              margin-left: 0;
+                          }
+                      }
+                  }
+                  .mat-mdc-progress-bar {
+                      margin: {
+                          left: 0;
+                          right: 10px;
+                      };
+                  }
+              }
+          }
+      }
+  }
+  ::ng-deep {
+      .mat-mdc-card {
+          &.daxa-card {
+              &.team-card {
+                  .mat-mdc-card-header {
+                      .mat-mdc-card-header-text {
+                          .mat-mdc-card-subtitle {
+                              .mat-mdc-button {
+                                  &.card-header-menu-btn {
+                                      right: auto;
+                                      left: 20px;
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+  .mat-mdc-card {
+      &.daxa-card {
+          &.team-card {
+              .mat-mdc-card-content {
+                  .image {
+                      margin-right: 12px;
+
+                      img {
+                          width: 100px;
+                      }
+                  }
+                  .title {
+                      font-size: 16px;
+                  }
+                  .mat-mdc-button {
+                      margin-top: 15px;
+                      font-size: 14px !important;
+                  }
+              }
+          }
+      }
+  }
+  ::ng-deep {
+      .mat-mdc-card {
+          &.daxa-card {
+              &.team-card {
+                  .mat-mdc-card-header {
+                      .mat-mdc-card-header-text {
+                          .mat-mdc-card-subtitle {
+                              .mat-mdc-button {
+                                  &.card-header-menu-btn {
+                                      top: 15px;
+                                      right: 15px;
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+  // RTL Enabled
+  .rtl-enabled {
+      .mat-mdc-card {
+          &.daxa-card {
+              &.team-card {
+                  .mat-mdc-card-content {
+                      .image {
+                          margin-left: 12px;
+                      }
+                  }
+              }
+          }
+      }
+      ::ng-deep {
+          .mat-mdc-card {
+              &.daxa-card {
+                  &.team-card {
+                      .mat-mdc-card-header {
+                          .mat-mdc-card-header-text {
+                              .mat-mdc-card-subtitle {
+                                  .mat-mdc-button {
+                                      &.card-header-menu-btn {
+                                          right: 15px;
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+  ::ng-deep {
+      .mat-mdc-card {
+          &.daxa-card {
+              &.team-card {
+                  .mat-mdc-card-header {
+                      .mat-mdc-card-header-text {
+                          .mat-mdc-card-subtitle {
+                              .mat-mdc-button {
+                                  &.card-header-menu-btn {
+                                      right: 20px;
+                                      top: 20px;
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+  // RTL Enabled
+  .rtl-enabled {
+      ::ng-deep {
+          .mat-mdc-card {
+              &.daxa-card {
+                  &.team-card {
+                      .mat-mdc-card-header {
+                          .mat-mdc-card-header-text {
+                              .mat-mdc-card-subtitle {
+                                  .mat-mdc-button {
+                                      &.card-header-menu-btn {
+                                          right: auto;
+                                          left: 20px;
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+  
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

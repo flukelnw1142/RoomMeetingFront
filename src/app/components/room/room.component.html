@@ -1,0 +1,725 @@
+<div class="add-new-event-popup" [class.active]="AddRoomClassApplied">
+    <div class="popup-dialog">
+        <mat-card
+            class="daxa-card mb-25 border-radius bg-white border-none d-block"
+        >
+            <mat-card-header>
+                <mat-card-title>
+                    <div [ngSwitch]="mode">
+                        <div *ngSwitchCase="'view'" class="mode-view">
+                            <h4>Room detail</h4>
+                        </div>
+                        <div *ngSwitchCase="'add'" class="mode-add">
+                            <h4>Add room</h4>
+                        </div>
+                        <div *ngSwitchCase="'edit'" class="mode-edit">
+                            <h4>edit room</h4>
+                        </div>
+                    </div>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button mat-button (click)="toggleRoomAddClass()">
+                        <i class="ri-close-fill"></i>
+                    </button>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div [ngSwitch]="mode">
+                    <div *ngSwitchCase="'view'" class="mode-view">
+                        <!-- แสดงข้อมูล -->
+                        <div *ngIf="roomDetail">
+                            <p>
+                                <strong> Name :</strong>
+                                {{ roomDetail.roomName }}
+                            </p>
+                            <p>
+                                <strong> Location :</strong
+                                >{{ roomDetail.roomLocation }}
+                            </p>
+                            <p>
+                                <strong> Floor :</strong>
+                                {{ roomDetail.roomFloor }}
+                            </p>
+                            <p>
+                                <strong> SeatCount :</strong
+                                >{{ roomDetail.seatCount }}
+                            </p>
+                            <p>
+                                <strong> Facilities :</strong
+                                >{{ roomDetail.facilities }}
+                            </p>
+                            <p>
+                                <strong> Remark :</strong
+                                >{{ roomDetail.remark }}
+                            </p>
+                            <p>
+                                <strong> Status :</strong>
+                                {{
+                                    roomDetail.status == 1
+                                        ? "Active"
+                                        : "Inactive"
+                                }}
+                            </p>
+
+                            <div class="col-lg-12">
+                                <mat-card
+                                    class="daxa-card mb-25 border-radius bg-white border-none d-block"
+                                >
+                                    <mat-card-content>
+                                        <owl-carousel-o [options]="RoomSlides">
+                                            <ng-template
+                                                carouselSlide
+                                                *ngFor="
+                                                    let file of roomDetail.files
+                                                "
+                                            >
+                                                <!-- <img
+                                            [src]="file.filePath + '/' + file.fileName" 
+
+                                                [alt]="file.fileName || 'Image'"
+                                            /> -->
+                                                <img
+                                                    [src]="file.roomImg"
+                                                    [alt]="
+                                                        file.fileName || 'Image'
+                                                    "
+                                                />
+                                            </ng-template>
+                                        </owl-carousel-o>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                            <div
+                                class="col-lg-12 d-flex justify-content-center"
+                            >
+                                <button
+                                    mat-raised-button
+                                    class="d-block w-60 text-center"
+                                    color="warn"
+                                    (click)="toggleRoomAddClass()"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngSwitchCase="'add'" class="mode-add">
+                        <form [formGroup]="addRoomForm" (ngSubmit)="onSubmit()">
+                            <mat-form-field>
+                                <mat-label>Room Name</mat-label>
+                                <input matInput formControlName="RoomName" />
+                                <mat-error
+                                    *ngIf="
+                                        addRoomForm
+                                            .get('RoomName')
+                                            ?.hasError('required')
+                                    "
+                                >
+                                    Room Name is required.
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="
+                                        addRoomForm
+                                            .get('RoomName')
+                                            ?.hasError('maxlength')
+                                    "
+                                >
+                                    Room Name must not exceed 20 characters.
+                                </mat-error>
+                            </mat-form-field>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <mat-form-field class="date">
+                                        <mat-label>Room Location</mat-label>
+                                        <mat-select
+                                            formControlName="RoomLocation"
+                                            [(value)]="location_selected"
+                                        >
+                                            <mat-option value="The One Enterprise"
+                                                >The One Enterprise</mat-option
+                                            >
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-form-field class="date">
+                                        <mat-label>Room Floor</mat-label>
+                                        <mat-select formControlName="RoomFloor">
+                                            <mat-option value="14"
+                                                >14</mat-option
+                                            >
+                                            <mat-option value="15"
+                                                >15</mat-option
+                                            >
+                                            <mat-option value="16"
+                                                >16</mat-option
+                                            >
+                                            <mat-option value="17"
+                                                >17</mat-option
+                                            >
+                                            <mat-option value="24"
+                                                >24</mat-option
+                                            >
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <mat-form-field class="textarea">
+                                        <mat-label>Seat</mat-label>
+                                        <input
+                                            matInput
+                                            formControlName="SeatCount"
+                                            placeholder="e.g., 10-20"
+                                        />
+                                        <mat-error
+                                            *ngIf="
+                                                addRoomForm
+                                                    .get('SeatCount')
+                                                    ?.hasError('required')
+                                            "
+                                        >
+                                            Seat is required.
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="
+                                                addRoomForm
+                                                    .get('SeatCount')
+                                                    ?.hasError('pattern')
+                                            "
+                                        >
+                                            Seat must be in the format xx-yy.
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="
+                                                addRoomForm
+                                                    .get('SeatCount')
+                                                    ?.hasError('invalidRange')
+                                            "
+                                        >
+                                            The second number (yy) must be
+                                            greater than the first (xx).
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-form-field>
+                                        <mat-label>Facilities</mat-label>
+                                        <mat-select
+                                            [formControl]="Facilities"
+                                            multiple
+                                        >
+                                            <mat-select-trigger>
+                                                {{Facilities.value?.[0] || ''}}
+                                                @if ((Facilities.value?.length
+                                                || 0) > 1) {
+                                                <span
+                                                    class="example-additional-selection"
+                                                >
+                                                    (+{{
+                                                        (Facilities.value
+                                                            ?.length || 0) - 1
+                                                    }}
+                                                    {{
+                                                        Facilities.value
+                                                            ?.length === 2
+                                                            ? "other"
+                                                            : "others"
+                                                    }})
+                                                </span>
+                                                }
+                                            </mat-select-trigger>
+                                            @for (Facilities of FacilitiesList;
+                                            track Facilities) {
+                                            <mat-option [value]="Facilities">{{
+                                                Facilities
+                                            }}</mat-option>
+                                            }
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <mat-form-field class="textarea">
+                                        <mat-label>Remark</mat-label>
+                                        <input
+                                            matInput
+                                            formControlName="Remark"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <!-- <mat-form-field class="textarea"> -->
+                                      
+                                        <mat-radio-group
+                                            aria-label="Select an option"
+                                            formControlName="RoomType"
+                                        >
+                                            <mat-radio-button value="Meeting"
+                                                >Meeting</mat-radio-button
+                                            >
+                                            <mat-radio-button value="Massage"
+                                                >Massage</mat-radio-button
+                                            >
+                                        </mat-radio-group>
+                                    <!-- </mat-form-field> -->
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-slide-toggle formControlName="Status"
+                                        >Status</mat-slide-toggle
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="center">
+                                    <ngx-file-drop
+                                        dropZoneLabel="Drop files here"
+                                        (onFileDrop)="addDropped($event)"
+                                        (onFileOver)="fileOver($event)"
+                                        (onFileLeave)="fileLeave($event)"
+                                    >
+                                        <ng-template
+                                            ngx-file-drop-content-tmp
+                                            let-openFileSelector="openFileSelector"
+                                        >
+                                            <button
+                                                mat-stroked-button
+                                                color="primary"
+                                                type="button"
+                                                (click)="openFileSelector()"
+                                            >
+                                                Browse Image Files
+                                            </button>
+                                        </ng-template>
+                                    </ngx-file-drop>
+                                    <div class="upload-table">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="upload-name-style">
+                                                <tr
+                                                    *ngFor="
+                                                        let item of selectedImg;
+                                                        let i = index
+                                                    "
+                                                >
+                                                    <td>
+                                                        <strong>{{
+                                                            item.name
+                                                        }}</strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="booking-btn-box">
+                                <button
+                                    mat-raised-button
+                                    class="d-block w-60 text-center"
+                                    type="submit"
+                                    color="primary"
+                                    [disabled]="!addRoomForm.valid"
+                                >
+                                    Add
+                                </button>
+
+                                <button
+                                    mat-raised-button
+                                    class="d-block w-60 text-center"
+                                    type="button"
+                                    color="warn"
+                                    (click)="toggleRoomAddClass()"
+                                >
+                                    Cancle
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div *ngSwitchCase="'edit'" class="mode-edit">
+                        <form
+                            [formGroup]="editRoomForm"
+                            (ngSubmit)="onEditSubmit()"
+                        >
+                            <mat-form-field>
+                                <mat-label>Room Name</mat-label>
+                                <input matInput formControlName="RoomName" />
+                            </mat-form-field>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <mat-form-field class="date">
+                                        <mat-label>Room Location</mat-label>
+                                        <mat-select
+                                            formControlName="RoomLocation"
+                                            [(value)]="location_selected"
+                                        >
+                                            <mat-option value="GMM Grammy Place"
+                                                >GMM Grammy Place</mat-option
+                                            >
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-form-field class="date">
+                                        <mat-label>Room Floor</mat-label>
+                                        <mat-select formControlName="RoomFloor">
+                                            <mat-option value="14"
+                                                >14</mat-option
+                                            >
+                                            <mat-option value="15"
+                                                >15</mat-option
+                                            >
+                                            <mat-option value="16"
+                                                >16</mat-option
+                                            >
+                                            <mat-option value="17"
+                                                >17</mat-option
+                                            >
+                                            <mat-option value="24"
+                                                >24</mat-option
+                                            >
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <mat-form-field class="textarea">
+                                        <mat-label>Seat</mat-label>
+                                        <input
+                                            matInput
+                                            formControlName="SeatCount"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-form-field>
+                                        <mat-label>Facilities</mat-label>
+
+                                        <mat-select
+                                            formControlName="Facilities"
+                                            multiple
+                                        >
+                                            <mat-select-trigger>
+                                                {{
+                                                    selectedFacilities[0] || ""
+                                                }}
+                                                <span
+                                                    *ngIf="
+                                                        selectedFacilities.length >
+                                                        1
+                                                    "
+                                                    class="example-additional-selection"
+                                                >
+                                                    (+{{
+                                                        selectedFacilities.length -
+                                                            1
+                                                    }}
+                                                    {{
+                                                        selectedFacilities.length ===
+                                                        2
+                                                            ? "other"
+                                                            : "others"
+                                                    }})
+                                                </span>
+                                            </mat-select-trigger>
+
+                                            <mat-option
+                                                *ngFor="
+                                                    let facility of FacilitiesList
+                                                "
+                                                [value]="facility"
+                                            >
+                                                {{ facility }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <mat-form-field class="textarea">
+                                        <mat-label>Remark</mat-label>
+                                        <input
+                                            matInput
+                                            formControlName="Remark"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <mat-radio-group
+                                        aria-label="Select an option"
+                                    >
+                                        <mat-radio-button value="Meeting"
+                                            >Meeting</mat-radio-button
+                                        >
+                                        <mat-radio-button value="Massage"
+                                            >Massage</mat-radio-button
+                                        >
+                                    </mat-radio-group>
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-slide-toggle formControlName="Status"
+                                        >Status</mat-slide-toggle
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="center">
+                                    <ngx-file-drop
+                                        [dropZoneLabel]="dropZoneLabel"
+                                        (onFileDrop)="editDropped($event)"
+                                        (onFileOver)="fileOver($event)"
+                                        (onFileLeave)="fileLeave($event)"
+                                    >
+                                        <ng-template
+                                            ngx-file-drop-content-tmp
+                                            let-openFileSelector="openFileSelector"
+                                        >
+                                            <button
+                                                mat-stroked-button
+                                                color="primary"
+                                                type="button"
+                                                (click)="openFileSelector()"
+                                            >
+                                                Browse Image Files
+                                            </button>
+                                        </ng-template>
+                                    </ngx-file-drop>
+                                    <div class="upload-table">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="upload-name-style">
+                                                <tr
+                                                    *ngFor="
+                                                        let item of selectedImg;
+                                                        let i = index
+                                                    "
+                                                >
+                                                    <td>
+                                                        <strong>{{
+                                                            item.name
+                                                        }}</strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="booking-btn-box">
+                             
+                                <button
+                                    mat-raised-button
+                                    class="d-block w-60 text-center"
+                                    type="submit"
+                                    color="primary"
+                                    [disabled]="!editRoomForm.valid"
+                                >
+                                    Save Changes
+                                </button>
+
+                                <button
+                                    mat-raised-button
+                                    class="d-block w-60 text-center"
+                                    type="button"
+                                    color="warn"
+                                    (click)="toggleRoomEditClass()"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<!-- Room List -->
+
+<div class="add-new-event-popup" [class.active]="RoomSettingClassApplied">
+    <div class="popup-room-detail-dialog">
+        <mat-card
+            class="daxa-card recent-orders-card mb-25 border-radius bg-white border-none d-block"
+        >
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">Room Setting</h5>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button mat-button (click)="toggleRoomSettingClass()">
+                        <i class="ri-close-fill"></i>
+                    </button>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="recent-orders-table">
+                    <div class="table-responsive">
+                        <table
+                            mat-table
+                            [dataSource]="dataSource"
+                            class="mat-elevation-z8"
+                            matSort
+                        >
+                            <!-- ID Column -->
+
+                            <ng-container matColumnDef="roomName">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Room Name
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <h5>{{ element.roomName }}</h5>
+                                    {{ element.roomLocation }}
+                                </td>
+                            </ng-container>
+                            <!-- Profit Column -->
+                            <ng-container matColumnDef="facilities">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Facilities
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    Seat : {{ element.seatCount }}
+                                    <ul>
+                                        <li
+                                            *ngFor="
+                                                let facility of getFormattedFacilities(
+                                                    element.facilities
+                                                )
+                                            "
+                                        >
+                                            {{ facility }}
+                                        </li>
+                                    </ul>
+                                </td>
+                            </ng-container>
+                            <!-- Status Column -->
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Status
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span
+                                        *ngIf="element.status.pending"
+                                        class="daxa-badge pending"
+                                    >
+                                        {{ element.status.pending }}
+                                    </span>
+                                    <span
+                                        *ngIf="element.status.shipped"
+                                        class="daxa-badge shipped"
+                                    >
+                                        {{ element.status.shipped }}
+                                    </span>
+                                    <span
+                                        *ngIf="element.status.confirmed"
+                                        class="daxa-badge confirmed"
+                                    >
+                                        {{ element.status.confirmed }}
+                                    </span>
+                                    <span
+                                        *ngIf="element.status.rejected"
+                                        class="daxa-badge rejected"
+                                    >
+                                        {{ element.status.rejected }}
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <!-- Action Column -->
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Action
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div class="action-info">
+                                        <button
+                                            mat-button
+                                            routerLink="/ecommerce-page/order-details"
+                                            matTooltip="View Order"
+                                            (click)="onViewDetail(element)"
+                                            matTooltipPosition="above"
+                                        >
+                                            <i
+                                                class="material-symbols-outlined"
+                                            >
+                                                {{ element.action.view }}
+                                            </i>
+                                        </button>
+
+                                        <button
+                                            mat-button
+                                            matTooltip="Edit"
+                                            (click)="onEditDetail(element)"
+                                            matTooltipPosition="above"
+                                        >
+                                            <i
+                                                class="material-symbols-outlined"
+                                            >
+                                                {{ element.action.edit }}
+                                            </i>
+                                        </button>
+                                        <button
+                                            mat-button
+                                            matTooltip="Delete"
+                                            matTooltipPosition="above"
+                                            (click)="
+                                                onDeleteRoom(element.roomNo)
+                                            "
+                                        >
+                                            <i
+                                                class="material-symbols-outlined"
+                                            >
+                                                {{ element.action.delete }}
+                                            </i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <!-- Table Header and Row Definitions -->
+                            <tr
+                                mat-header-row
+                                *matHeaderRowDef="displayedColumns"
+                            ></tr>
+                            <tr
+                                mat-row
+                                *matRowDef="let row; columns: displayedColumns"
+                            ></tr>
+                            <!-- No Data Row -->
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell" colspan="7">
+                                    No data matching the filter
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <mat-paginator
+                        [pageSizeOptions]="[5, 10, 15, 20]"
+                        showFirstLastButtons
+                        ELEMENT_DATA.length
+                    ></mat-paginator>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

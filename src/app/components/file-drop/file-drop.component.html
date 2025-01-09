@@ -1,0 +1,20 @@
+<ngx-file-drop
+[dropZoneLabel]="dropZoneLabel"
+(onFileDrop)="dropped($event)"
+(onFileOver)="fileOver($event)"
+(onFileLeave)="fileLeave($event)"
+>
+<ng-template
+  ngx-file-drop-content-tmp
+  let-openFileSelector="openFileSelector"
+>
+  <button
+    mat-stroked-button
+    color="primary"
+    type="button"
+    (click)="openFileSelector()"
+  >
+    {{ buttonLabel }}
+  </button>
+</ng-template>
+</ngx-file-drop>

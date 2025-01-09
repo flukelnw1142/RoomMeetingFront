@@ -1,0 +1,527 @@
+<app-header></app-header>
+<app-room></app-room>
+<div class="main-content">
+    <div class="header">
+        <h1 class="title"></h1>
+        <div class="search-container">
+            <input type="text" placeholder="Search available meeting room..." class="search-input" disabled
+                (click)="openSearchRoom()" />
+            <button class="search-button">
+                <i class="material-symbols-outlined" (click)="openSearchRoom()">search</i>
+            </button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="d-md-flex align-items-center justify-content-between">
+            <div class="header-left-side d-flex align-items-center">
+                <div class="burger-menu cursor-pointer transition d-xl-none">
+                    <span class="top-bar d-block bg-black transition"></span>
+                    <span class="middle-bar d-block bg-black transition"></span>
+                    <span class="bottom-bar d-block bg-black transition"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 col-lg-4 col-xxxl-4">
+                <mat-card class="daxa-card todays-course-card mb-25 border-radius bg-white border-none d-block">
+                    <mat-card-header>
+                        <mat-form-field>
+                            <mat-select [(value)]="roomSelectedId" (selectionChange)="onCategoryChange($event.value)">
+                                <mat-option *ngFor="let option of roomList" [value]="option.ID">
+                                    {{ option.ROOM_NAME }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
+                            <mat-card-header> </mat-card-header>
+                            <mat-card-content>
+                                <owl-carousel-o [options]="imageSlides">
+                                    <ng-template carouselSlide *ngFor="let image of roomSelected?.img">
+                                        <img [src]="image.roomImg" class="border-radius mt-15"
+                                            alt="Image of {{ image.fileName }}" />
+                                    </ng-template>
+                                </owl-carousel-o>
+                                <h5 class="mb-10 mt-15">
+                                    {{ roomSelected?.name }}
+                                </h5>
+                                <span class="d-block text-body">
+                                    Num of Seats : {{ roomSelected?.Seats }}
+                                </span>
+                                <span class="text-body"> Facilities : </span>
+                                {{ roomSelected?.Facilities }}
+                            </mat-card-content>
+                        </mat-card>
+
+                    </mat-card-content>
+                    <mat-card-header> </mat-card-header>
+                    <mat-card class="daxa-card working-schedule-card mb-25 border-radius bg-white border-none d-block">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h5 class="mb-0">การจองวันนี้</h5>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="events-content">
+                                <div *ngIf="todayEvenError">
+                                    {{ todayEvenError }}
+                                </div>
+
+                                <ul class="mt-0 pl-0 list-unstyled mb-0 mr-10">
+                                    <div *ngIf="todayBookings">
+                                        <div class="scroll-content">
+                                            <div *ngFor="
+                                                let booking of todayBookings
+                                            ">
+                                                <li>
+                                                    <span ngClass="{{
+                                                        booking.bookingType
+                                                    }}">
+                                                        {{ booking.bookingSubject }}
+                                                    </span>
+                                                    <br />
+                                                    <span class="text-body">
+                                                        ({{ booking.bookingFrom }} -
+                                                        {{ booking.bookingTo }}.)
+                                                    </span>
+                                                </li>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-card>
+            </div>
+            <div class="col-8 col-lg-8 col-xxxl-8">
+                <full-calendar [options]="calendarOptions"></full-calendar>
+            </div>
+            <div class="add-new-event-popup" [class.active]="classApplied">
+                <div class="popup-dialog">
+                    <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h5 class="mb-0">Booking Room</h5>
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                                <button mat-button (click)="toggleClass()">
+                                    <i class="ri-close-fill"></i>
+                                </button>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <form [formGroup]="bookingForm" (ngSubmit)="onBookingSubmit()">
+                                <label class="main-label d-block lh-1 text-black">Room Name</label>
+                                <mat-form-field><mat-label>Room Name</mat-label>
+                                    <mat-select [(value)]="roomSelectedId" (selectionChange)="
+                                        onCategoryChange($event.value)" formControlName="BookingRoomId">
+                                        <mat-option *ngFor="let option of roomList" [value]="option.ID">
+                                            {{ option.ROOM_NAME }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="main-label d-block lh-1 text-black">
+                                            Booking Date
+                                        </label>
+                                        <mat-form-field class="date">
+                                            <mat-label> Choose a date </mat-label>
+                                            <input matInput [value]="displayValue" (input)="onInputChange($event)" />
+                                            <input matInput [matDatepicker]="AddBookingDate"
+                                                formControlName="BookingDate"
+                                                (dateChange)="onAddbookingDateSelected($event)"
+                                                [matDatepickerFilter]="datePickerFilter" style="display: none;" />
+                                            <mat-datepicker-toggle matIconSuffix
+                                                [for]="AddBookingDate"></mat-datepicker-toggle>
+                                            <mat-datepicker #AddBookingDate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="main-label d-block lh-1 text-black">
+                                            Booking Type
+                                        </label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Booking Type</mat-label>
+                                            <mat-select [(value)]="selectedTopic" [ngClass]="selectedTopic"
+                                                formControlName="BookingType">
+                                                <mat-option *ngFor="let topic of topics" [value]="topic.name">
+                                                    {{ topic.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="main-label d-block lh-1 text-black">
+                                            Start Time
+                                        </label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>เลือกเวลา</mat-label>
+                                            <mat-select [(value)]="selectedTimeFrom" formControlName="BookingTimeFrom"
+                                                (selectionChange)="
+                                                onTimeFromChange($event.value)
+                                            ">
+                                                <mat-option *ngFor="
+                                                    let time of availableTimesFrom
+                                                " [value]="time">
+                                                    {{ time }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="main-label d-block lh-1 text-black">Start to
+                                        </label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>เลือกเวลา</mat-label>
+                                            <mat-select [(value)]="selectedTimeTo" formControlName="BookingTimeTo"
+                                                [disabled]="!selectedTimeFrom">
+                                                <mat-option *ngFor="
+                                                    let time of availableTimesTo
+                                                " [value]="time">
+                                                    {{ time }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <p *ngIf="timeRangErrorMessage" style="color: red">
+                                        {{ timeRangErrorMessage }}
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <mat-form-field class="mb-25">
+                                            <mat-label>Topic</mat-label>
+                                            <input matInput placeholder="Topic" formControlName="BookingTopic" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <mat-form-field class="textarea">
+                                            <mat-label>Description</mat-label>
+                                            <textarea matInput Topic formControlName="Description"></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <mat-form-field>
+                                            <mat-label>Phone</mat-label>
+                                            <input id="phone" type="tel" matInput formControlName="Phone"
+                                                placeholder="Enter 4 or 10 digit phone number" />
+                                            <mat-error *ngIf="bookingForm.get('Phone')?.hasError('required')">
+                                                Phone number is required.
+                                            </mat-error>
+                                            <mat-error *ngIf="bookingForm.get('Phone')?.hasError('pattern')">
+                                                Phone number must be 4 digits or 10 digits only.
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="booking-btn-box">
+                                <button mat-raised-button class="d-block w-60 text-center" type="submit" color="primary"
+                                    [disabled]="bookingForm.invalid" (click)="onBookingSubmit()">
+                                    Add
+                                </button>
+                                <button mat-raised-button class="d-block w-60 text-center" color="warn"
+                                    (click)="toggleClass()">
+                                    Cancle
+                                </button>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+            <div class="add-new-event-popup" [class.active]="classRoomdDetailApplied">
+                <div class="popup-search-room-dialog">
+                    <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
+                        <mat-card-header>
+                            <mat-card-title>
+                                Booking Detail
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                                <button mat-button (click)="toggleRoomdDetailClass()">
+                                    <i class="ri-close-fill"></i>
+                                </button>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <form [formGroup]="bookingEditForm" (ngSubmit)="onBookingSubmit()">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <mat-form-field class="date">
+                                            <mat-label> Room name </mat-label>
+                                            <mat-select [(value)]="roomSelectedId" (selectionChange)="
+                                onCategoryChange($event.value)
+                            " formControlName="BookingRoomId">
+                                                <mat-option *ngFor="let option of roomOption" [value]="option.id">
+                                                    {{ option.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-6" *ngIf="bookingDetail.isOwner">
+                                        <h4> Booker's Detail</h4>
+                                        <p>
+                                            <strong> Name of the person booking :</strong>
+                                            {{ bookingDetail.bookingByName }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <mat-form-field class="date">
+                                            <mat-label>Choose a date</mat-label>
+                                            <input matInput [matDatepicker]="EditBookingDate"
+                                                formControlName="BookingDate"
+                                                (dateChange)="onAddbookingDateSelected($event)" />
+                                            <mat-datepicker-toggle matIconSuffix
+                                                [for]="EditBookingDate"></mat-datepicker-toggle>
+                                            <mat-datepicker #EditBookingDate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-6" *ngIf="bookingDetail.isOwner">
+                                        <p>
+                                            <strong> Department of the person booking :</strong>
+                                            {{ bookingDetail.bookingDepartment }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Booking Type</mat-label>
+                                            <mat-select [(value)]="selectedTopic" [ngClass]="selectedTopic"
+                                                formControlName="BookingType">
+                                                <mat-option *ngFor="let topic of topics" [value]="topic.name">
+                                                    {{ topic.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-6" *ngIf="bookingDetail.isOwner">
+                                        <p>
+                                            <strong> Email of the person booking :</strong>
+                                            {{ bookingDetail.bookingByContact }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Time From</mat-label>
+                                            <mat-select [(value)]="selectedTimeFromEdit"
+                                                formControlName="BookingTimeFrom" (selectionChange)="
+                                        onTimeFromChange($event.value)
+                                    ">
+                                                <mat-option *ngFor="
+                                            let time of availableTimesFrom
+                                        " [value]="time">
+                                                    {{ time }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>
+                                            <strong> Phone of the person booking :</strong>
+                                            {{ bookingDetail.bookingByMobile }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Time To</mat-label>
+                                            <mat-select [(value)]="selectedTimeToEdit" formControlName="BookingTimeTo"
+                                                [disabled]="!selectedTimeFrom">
+                                                <mat-option *ngFor="
+                                            let time of availableTimesTo
+                                        " [value]="time">
+                                                    {{ time }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+                                <ng-template *ngIf="bookingDetail.isOwner">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <mat-form-field class="mb-25">
+                                                <mat-label>Topic</mat-label>
+                                                <input matInput placeholder="Topic" formControlName="BookingTopic" />
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <mat-form-field class="textarea">
+                                                <mat-label>Description</mat-label>
+                                                <textarea matInput Topic formControlName="Description"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="booking-btn-box">
+                                            <button mat-raised-button class="d-block w-60 text-center" type="submit"
+                                                color="primary" [disabled]="!bookingEditForm.valid"
+                                                *ngIf="bookingDetail.isOwner">
+                                                Edit
+                                            </button>
+
+                                            <button mat-raised-button class="d-block w-60 text-center" type="button"
+                                                color="warn" (click)="toggleRoomdDetailClass()">
+                                                Cancle
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+
+            <div class="add-new-event-popup" [class.active]="RoomSearchClassApplied">
+                <div class="popup-search-room-dialog">
+                    <mat-card class="daxa-card recent-orders-card mb-25 border-radius bg-white border-none d-block">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h5 class="mb-0">Search Room</h5>
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                                <button mat-button (click)="toggleSearchClass()">
+                                    <i class="ri-close-fill"></i>
+                                </button>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div>
+                                <form [formGroup]="searchRoomForm" (ngSubmit)="onSearchRoom()">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label class="main-label d-block lh-1 text-black">
+                                                Search Date
+                                            </label>
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker1" formControlName="searchDate"
+                                                    (dateChange)="onSearchDateSelected($event)"
+                                                    placeholder="Search Date" [min]="minDate">
+                                                <mat-datepicker-toggle matSuffix
+                                                    [for]="picker1"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker1></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label class="main-label d-block lh-1 text-black">
+                                                Start Time
+                                            </label>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>เลือกเวลา</mat-label>
+                                                <mat-select [(value)]="selectedTimeFrom"
+                                                    formControlName="searchTimeFrom" (selectionChange)="
+                                        onTimeFromChange($event.value)
+                                    ">
+                                                    <mat-option *ngFor="
+                                            let time of availableTimesFrom
+                                        " [value]="time">
+                                                        {{ time }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="main-label d-block lh-1 text-black">Start to
+                                            </label>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>เลือกเวลา</mat-label>
+                                                <mat-select [(value)]="selectedTimeTo" formControlName="searchTimeTo"
+                                                    [disabled]="!selectedTimeFrom">
+                                                    <mat-option *ngFor="
+                                            let time of availableTimesTo
+                                        " [value]="time">
+                                                        {{ time }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <p *ngIf="timeRangErrorMessage" style="color: red">
+                                            {{ timeRangErrorMessage }}
+                                        </p>
+                                    </div>
+                                    <div class="booking-btn-box">
+                                        <button mat-raised-button class="d-block w-60 text-center" type="submit"
+                                            color="primary" [disabled]="!searchRoomForm.valid">
+                                            Search
+                                        </button>
+
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+                                        <ng-container matColumnDef="roomImg">
+
+                                            <td mat-cell *matCellDef="let element" style="padding: 3px;">
+                                                <img [src]="element.roomImg.fileName"
+                                                    class="carousel-room-avaliable-image border-radius mt-15"
+                                                    alt="Image of {{ element.roomImg.fileName }}" />
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="roomDetail">
+
+                                            <td mat-cell *matCellDef="let element" style="padding: 3px;">
+                                                <h5>{{ element.roomName }} <span class="room-floor"> [Floor.{{
+                                                        element.roomFloor }}]</span></h5>
+                                                <h6>{{ element.searchDate }} <span class="room-floor">{{
+                                                        element.searchTimeFrom }}-{{ element.searchTimeTo }}</span></h6>
+                                                <p>Num Of Seat : {{ element.seatCount}}</p>
+
+                                        </ng-container>
+                                        <ng-container matColumnDef="action">
+                                            <td mat-cell *matCellDef="let element" style="padding: 3px;">
+                                                <button mat-flat-button extended color="accent"
+                                                    (click)="onBookNow(element)">
+                                                    <mat-icon>room</mat-icon>
+                                                    BOOK NOW
+                                                </button>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+
+                                    </table>
+                                </div>
+                                <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons
+                                    RoomElementData.length></mat-paginator>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="line-scale-pulse-out">
+        <p style="font-size: 20px; color: white;">Loading...</p>
+    </ngx-spinner>
+    <button mat-fab class="daxa settings-btn" (click)="toggleClass()" [disabled]="add_btn_disabled"
+        style="background-color: #4b3a2a;">
+        <mat-icon style="color: #ffff;">library_add</mat-icon>
+    </button>
